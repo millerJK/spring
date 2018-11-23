@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd">
 
+    <context:component-scan base-package="com"/>
 
-    <bean id="id_userService" class="UserServiceImpl" lazy-init="true">
-        <property name="userDao" ref="id_userDao"/>
-    </bean>
-
-    <bean id="id_userDao" class="UserDaoImpl" lazy-init="true"></bean>
-
-
-    <bean id="id_student" class="Student" lazy-init="true">
+    <bean id="id_student" class="com.domain.Student" lazy-init="true">
 
         <property name="age" value="12"/>
         <property name="sex" value="women"/>
@@ -35,7 +36,7 @@
         </property>
     </bean>
 
-    <bean id="id_honors" class="Honors" lazy-init="true">
+    <bean id="id_honors" class="com.domain.Honors" lazy-init="true">
         <property name="honors">
             <list>
                 <value>百团大战突击手</value>
@@ -45,9 +46,14 @@
     </bean>
 
 
-    <bean name="id_teacher" class="Teacher" lazy-init="true">
+    <bean name="id_teacher" class="com.domain.Teacher" lazy-init="true">
         <constructor-arg name="age" value="45"/>
         <constructor-arg name="name" value="xiaofang"/>
         <constructor-arg name="honor" value="#{id_honors.honors.get(0)}"/>
     </bean>
+
+    <task:annotation-driven executor="annotationExecutor" />
+    <!-- 支持 @Async 注解 -->
+    <task:executor id="annotationExecutor" pool-size="20"/>
+
 </beans>

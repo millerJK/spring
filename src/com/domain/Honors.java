@@ -1,3 +1,5 @@
+package com.domain;
+
 import java.util.List;
 
 public class Honors {

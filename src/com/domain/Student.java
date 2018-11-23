@@ -1,4 +1,5 @@
-import java.util.HashMap;
+package com.domain;
+
 import java.util.List;
 import java.util.Map;
 
