@@ -11,6 +11,12 @@
     <title>$Title$</title>
   </head>
   <body>
-  $END$
+  <a href="/TestController?option=helloworld">点击我</a>
+  <hr>
+  <a href="/OrgController?option=add">增</a>
+  <a href="/OrgController?option=delete">删</a>
+  <a href="/OrgController?option=update">改</a>
+  <a href="/OrgController?option=query">查</a>
+  <hr>
   </body>
 </html>
