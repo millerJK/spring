@@ -1,12 +1,15 @@
 package com.service;
 
 import com.dao.UserDao;
+import com.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service("id_userService")
@@ -22,11 +25,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Async
     public boolean login(String username, String password) {
         //dao层查询数据
-        System.out.println("调用dao层查询用户名和密码   " + Thread.currentThread());
-        boolean b = userDao.queryUsernameAndPassword(username, password);
+        boolean b = userDao.insertUser(username, password);
         return b;
+    }
+
+    @Override
+    public boolean unregister(String username) {
+        return userDao.deleteUser(username);
+    }
+
+    @Override
+    public boolean changePassword(String username, String password) {
+        return userDao.updateUserPwd(username, password);
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userDao.queryAllUsers();
     }
 }

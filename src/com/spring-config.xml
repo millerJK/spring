@@ -12,48 +12,44 @@
 
     <context:component-scan base-package="com"/>
 
-    <bean id="id_student" class="com.domain.Student" lazy-init="true">
+    <context:property-placeholder location="classpath:com/dbcp-config.properties" ignore-unresolvable="true"/>
 
-        <property name="age" value="12"/>
-        <property name="sex" value="women"/>
-        <property name="username" value="xiaoming"/>
-        <property name="flag" value="false"/>
-        <property name="teacher" ref="id_teacher"/>
-
-        <property name="courses">
-            <list>
-                <value>english</value>
-                <value>math</value>
-                <value>music</value>
-            </list>
-        </property>
-
-        <property name="hashMap">
-            <map>
-                <entry key="key1" value="value1"/>
-                <entry key="key2" value="value2"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="id_honors" class="com.domain.Honors" lazy-init="true">
-        <property name="honors">
-            <list>
-                <value>百团大战突击手</value>
-                <value>世界黑客大赛冠军</value>
-            </list>
-        </property>
+    <!--dbcp-->
+    <bean id="id_dbcp" class="org.apache.commons.dbcp.BasicDataSource" lazy-init="true">
+        <property name="driverClassName" value="${dbcp.driverClassName}"/>
+        <property name="url" value="${dbcp.url}"/>
+        <property name="username" value="${dbcp.username}"/>
+        <property name="password" value="${dbcp.password}"/>
+        <property name="initialSize" value="${dbcp.initialSize}"/>
+        <property name="maxActive" value="${dbcp.maxActive}"/>
+        <property name="maxIdle" value="${dbcp.maxIdle}"/>
+        <property name="minIdle" value="${dbcp.minIdle}"/>
+        <property name="maxWait" value="${dbcp.maxWait}"/>
     </bean>
 
 
-    <bean name="id_teacher" class="com.domain.Teacher" lazy-init="true">
-        <constructor-arg name="age" value="45"/>
-        <constructor-arg name="name" value="xiaofang"/>
-        <constructor-arg name="honor" value="#{id_honors.honors.get(0)}"/>
+    <bean id="dbcp_jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="true">
+        <constructor-arg name="dataSource" ref="id_dbcp"/>
     </bean>
 
-    <task:annotation-driven executor="annotationExecutor" />
-    <!-- 支持 @Async 注解 -->
-    <task:executor id="annotationExecutor" pool-size="20"/>
+    <!--c3p0-->
+    <context:property-placeholder location="classpath:com/c3p0-config.properties" ignore-unresolvable="true"/>
+
+    <bean id="id_c3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource" lazy-init="true">
+        <property name="driverClass" value="${c3p0.driverClass}"/>
+        <property name="jdbcUrl" value="${c3p0.jdbcUrl}"/>
+        <property name="user" value="${c3p0.user}"/>
+        <property name="password" value="${c3p0.password}"/>
+        <property name="initialPoolSize" value="${c3p0.initialPoolSize}"/>
+        <property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
+        <property name="minPoolSize" value="${c3p0.minPoolSize}"/>
+        <property name="checkoutTimeout" value="${c3p0.checkoutTimeout}"/>
+    </bean>
+
+    <bean id="c3p0_jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="true">
+        <constructor-arg name="dataSource" ref="id_c3p0"/>
+    </bean>
+
+
 
 </beans>
