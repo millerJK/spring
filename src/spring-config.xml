@@ -1,53 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <context:property-placeholder location="classpath:redis-config.properties"/>
 
-    <bean id="id_userService" class="UserServiceImpl" lazy-init="true">
-        <property name="userDao" ref="id_userDao"/>
+    <!--构建Redis 数据库连接池配置-->
+    <bean id="id_poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxTotal" value="${redis.maxActive}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
-    <bean id="id_userDao" class="UserDaoImpl" lazy-init="true"></bean>
-
-
-    <bean id="id_student" class="Student" lazy-init="true">
-
-        <property name="age" value="12"/>
-        <property name="sex" value="women"/>
-        <property name="username" value="xiaoming"/>
-        <property name="flag" value="false"/>
-        <property name="teacher" ref="id_teacher"/>
-
-        <property name="courses">
-            <list>
-                <value>english</value>
-                <value>math</value>
-                <value>music</value>
-            </list>
+    <!--构建哨兵的配置-->
+    <bean id="sentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+        <property name="master">
+            <bean class="org.springframework.data.redis.connection.RedisNode">
+                <property name="name" value="${redis.sentinel.master}"></property>
+            </bean>
         </property>
-
-        <property name="hashMap">
-            <map>
-                <entry key="key1" value="value1"/>
-                <entry key="key2" value="value2"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean id="id_honors" class="Honors" lazy-init="true">
-        <property name="honors">
-            <list>
-                <value>百团大战突击手</value>
-                <value>世界黑客大赛冠军</value>
-            </list>
+        <property name="sentinels">
+            <set>
+                <bean class="org.springframework.data.redis.connection.RedisNode">
+                    <constructor-arg name="host" value="${redis.sentinel1.host}"></constructor-arg>
+                    <constructor-arg name="port" value="${redis.sentinel1.port}"></constructor-arg>
+                </bean>
+                <bean class="org.springframework.data.redis.connection.RedisNode">
+                    <constructor-arg name="host" value="${redis.sentinel2.host}"></constructor-arg>
+                    <constructor-arg name="port" value="${redis.sentinel2.port}"></constructor-arg>
+                </bean>
+            </set>
         </property>
     </bean>
 
-
-    <bean name="id_teacher" class="Teacher" lazy-init="true">
-        <constructor-arg name="age" value="45"/>
-        <constructor-arg name="name" value="xiaofang"/>
-        <constructor-arg name="honor" value="#{id_honors.honors.get(0)}"/>
+    <bean id="id_jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="usePool" value="true"/>
+        <property name="timeout" value="10000"/>
+        <property name="database" value="0"/>
+        <constructor-arg index="0" ref="sentinelConfiguration"/>
+        <constructor-arg index="1" ref="id_poolConfig"/>
     </bean>
+
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="id_jedisConnectionFactory"/>
+    </bean>
+
 </beans>
