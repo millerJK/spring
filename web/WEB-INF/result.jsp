@@ -11,6 +11,6 @@
     <title>result</title>
 </head>
 <body>
-${requestScope.data1} ------------------------- ${requestScope.data2}
+result界面
 </body>
 </html>
