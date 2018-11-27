@@ -26,14 +26,15 @@ public class SingleController implements Controller {
     @Override
     public ModelAndView handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("data1", "data1Value1"); //setAttribute
+        modelAndView.addObject("data1", "data1Value1"); //等价于httpServletRequest.setAttribute
         modelAndView.addObject("data2", "dataValue2"); //setAttribute
 
 
-        modelAndView.addObject("dataValue3");
+        modelAndView.addObject("dataValue3");  //key 为string (key唯一性)
+        modelAndView.addObject("dataValue4");
         ArrayList<String> datas = new ArrayList<>();
         datas.add("1");
-        modelAndView.addObject(datas); //如上这个两个例子也可以看出key的生成规律
+        modelAndView.addObject(datas); //key 为stringList
 
 
         Map<String, Object> model = modelAndView.getModel();

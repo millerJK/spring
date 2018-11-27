@@ -5,6 +5,8 @@
 
 
     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean> <!--根据<bean>的name属性来进行匹配-->
+
 
     <bean id="id_parameterMethodName"
           class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
@@ -12,34 +14,25 @@
     </bean>
 
 
-
-    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean> <!--根据<bean>的name属性来进行匹配-->
-
     <bean name="/OrgController" class="com.itszt.controller.MulController">
     <property name="methodNameResolver" ref="id_parameterMethodName"/>
     </bean>
 
 
-
     <!--<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
-    <!--<property name="mappings">-->
-    <!--<props>-->
-    <!--<prop key="/OrgController">id_orgController</prop>-->
-    <!--</props>-->
-    <!--</property>-->
+        <!--<property name="mappings">-->
+            <!--<props>-->
+                <!--<prop key="/OrgController">id_orgController</prop>-->
+            <!--</props>-->
+        <!--</property>-->
     <!--</bean>-->
 
     <!--<bean id="id_orgController" class="com.itszt.controller.MulController">-->
-    <!--<property name="methodNameResolver" ref="id_parameterMethodName"/>-->
+        <!--<property name="methodNameResolver" ref="id_parameterMethodName"/>-->
     <!--</bean>-->
 
 
-
-
     <bean name="/TestController" class="com.itszt.controller.SingleController"></bean>
-
-
-
 
 
 </beans>
