@@ -11,10 +11,10 @@
     <title>$Title$</title>
   </head>
   <body>
-  <a href="/testAdd">增</a>
-  <a href="/testDel">删</a>
-  <a href="/testUpdate">改</a>
-  <a href="/testQuery">查</a>
+  <a href="/UserCenter/testAdd">增</a>
+  <a href="/UserCenter/testDel">删</a>
+  <a href="/UserCenter/testUpdate">改</a>
+  <a href="/UserCenter/testQuery">查</a>
   <hr>
 
   </body>
